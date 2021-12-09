@@ -4,7 +4,6 @@ import storage
 import board
 import digitalio
 
-# This is only one example of a gamepad descriptor, and may not suit your needs.
 GAMEPAD_REPORT_DESCRIPTOR = bytes((
     0x05, 0x01,  # Usage Page (Generic Desktop Ctrls)
     0x09, 0x05,  # Usage (Game Pad)
@@ -48,19 +47,15 @@ gamepad = usb_hid.Device(
     out_report_lengths=(0,),   # It does not receive any reports.
 )
 
-usb_hid.enable(
-    (usb_hid.Device.KEYBOARD,
-     usb_hid.Device.MOUSE,
-     gamepad)
-)
+usb_hid.enable((gamepad,))
 usb_midi.disable()
 
-button = digitalio.DigitalInOut(board.GP6)
+button = digitalio.DigitalInOut(board.GP2)
 button.switch_to_input(pull=digitalio.Pull.UP)
 
 if not button.value:
-    storage.disable_usb_drive()    # 대용량 드라이브 숨김
-    usb_cdc.disable()              # REPL끄기
+    storage.disable_usb_drive()    # Hide drive
+    usb_cdc.disable()              # REPL off
 '''
 if not button.value:
     storage.remount("/", False)
