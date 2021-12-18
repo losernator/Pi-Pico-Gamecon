@@ -7,7 +7,7 @@ CYAN = (0, 250, 250)
 BLUE = (0, 0, 255)
 PURPLE = (180, 0, 255)
 GREY = (30, 30, 30)
-WHITE = (125, 125, 125) # better not to use
+WHITE = (250, 250, 250) # better not to use
 
 config = {
    # 4way Joystick pins
@@ -36,25 +36,26 @@ config = {
    "X_led": 6,
    "Y":board.GP9,
    "Y_led": 5,
-   #"LB":board.GP14,
+   "LB":board.GP14,
    #"LB_led": 0,
-   #"RB":board.GP15,
+   "RB":board.GP15,
    #"LB_led": 0,
    "LT":board.GP10,
    "LT_led": 4,
    "RT":board.GP11,
    "RT_led": 3,
-   "SELECT":board.GP12,
-   "START":board.GP13,
+   "SELECT":board.GP13,
+   "START":board.GP12,
    #"L3":board.GP16,
    #"R3":board.GP17,
-   #"HOME":board.GP18,
+   "HOME":board.GP16,
    #"TOUCH":board.GP19,
    #"L4":board.GP20,
    #"R4":board.GP21,
 
    # NeoPixel - WS2812
    # 네오픽셀 ws2812b 핀 설정
+   # LED가 없을 경우 주석처리
    "neopixel_pin": board.GP0,
    # RED, YELLOW, GREEN, CYAN, BLUE, PURPLE, GREY, WHITE
    # RGB LED Color, must set as many as LED lights you have
@@ -62,8 +63,8 @@ config = {
    "led_color": [GREEN, RED, CYAN, CYAN, YELLOW, BLUE ],
    # LED 밝기 1이 최대
    "led_brightness": 1, # 1 is maximum value
-   # 버튼 디밍 단계, 높을수록 빨리 꺼짐
-   "fadingstep" : 12, # Dimming speed - higher, faster
+   # 버튼 디밍 단계 (0~255), 높을수록 빨리 꺼짐
+   "fadingstep" : 10, # Dimming speed - higher, faster
    # 대기모드 진입 시간 (초)
    "activetime" : 5, # Standby mode entry time(sec)
 

@@ -15,13 +15,18 @@ gp = Gamepad(usb_hid.devices)
 
 #NeoPixel
 button_leds = []
-dpad_leds = config.get('dpad_leds')
-led_color = config.get('led_color')
-num_pixels = len(led_color)
-pixels = neopixel.NeoPixel(config.get('neopixel_pin'), num_pixels, auto_write=False)
-pixels.brightness = config.get('led_brightness')
-fadingstep = config.get('fadingstep')
-activetime = config.get('activetime')
+dpad_leds = [0, 0, 0, 0]
+if config.get('neopixel_pin'):
+    dpad_leds = config.get('dpad_leds')
+    led_color = config.get('led_color')
+    num_pixels = len(led_color)
+    pixels = neopixel.NeoPixel(config.get('neopixel_pin'), num_pixels, auto_write=False)
+    pixels.brightness = config.get('led_brightness')
+    fadingstep = config.get('fadingstep')
+    activetime = config.get('activetime')
+    Neopixel = True
+else :
+    Neopixel = False
 
 # Buttons
 button_pins = []
@@ -72,22 +77,25 @@ for dpad in dpads:
 
 def rainbow(speed):
     ebreak = False
-    for j in range(255):
-        for i in range(num_pixels):
-            pixel_index = (i * 256 // num_pixels) + j
-            pixels[i] = colorwheel(pixel_index & 255)
-        for i, button in enumerate(buttons):
-            if not button.value:
-                ebreak = True
+    while True:
+        for j in range(255):
+            for i in range(num_pixels):
+                pixel_index = (i * 256 // num_pixels) + j
+                pixels[i] = colorwheel(pixel_index & 255)
+            for i, button in enumerate(buttons):
+                if not button.value:
+                    ebreak = True
+                    break
+            for i, hat in enumerate(dpads):
+                if not hat.value:
+                    ebreak = True
+                    break
+            if (ebreak):
                 break
-        for i, hat in enumerate(dpads):
-            if not hat.value:
-                ebreak = True
-                break
+            pixels.show()
+            time.sleep(speed)
         if (ebreak):
             break
-        pixels.show()
-        time.sleep(speed)
 
 def singlerainbow(speed,pixel_index):
     for j in range(255):
@@ -115,25 +123,25 @@ def colorchase(color, speed):
 
 def pixelfading(index):
     if pixels[index][0]+pixels[index][1]+pixels[index][2] > 0:
-        pixels[index]=(max([pixels[index][0] - fadingstep,0]), max([pixels[index][1] - fadingstep,0]), max([pixels[index][2] - fadingstep,0]))
-    pixels.show()
+        pixels[index]=(max([pixels[index][0] - pixels[index][0]/255 * fadingstep,0]), max([pixels[index][1] - pixels[index][1]/255 * fadingstep,0]), max([pixels[index][2] - pixels[index][2]/255 * fadingstep,0]))
+
 
 current_time = time.monotonic()
 while True:
-    if time.monotonic() - current_time > activetime:
-        rainbow(0.003)
+    if Neopixel:
+        if time.monotonic() - current_time > activetime:
+            rainbow(0.003)
     # Button pressed value = False
     for i, button in enumerate(buttons):
         button_num = gamepad_buttons[i]
         if not button.value:
             current_time = time.monotonic()
             gp.press_buttons(button_num)
-            if not button_leds[i] == 0:
+            if not button_leds[i] == 0 and Neopixel:
                 pixels[button_leds[i]-1] = led_color[button_leds[i]-1]
-                pixels.show()
         else:
             gp.release_buttons(button_num)
-            if not button_leds[i] == 0:
+            if not button_leds[i] == 0 and Neopixel:
                 pixelfading(button_leds[i]-1)
     # Joystick
     x = y = 0
@@ -148,14 +156,16 @@ while True:
                     y =  dpad_axis[i]
                 else:
                     x =  dpad_axis[i]
-            if not dpad_leds[i] == 0:
+            if not dpad_leds[i] == 0 and Neopixel:
                 pixels[dpad_leds[i]-1] = led_color[dpad_leds[i]-1]
         else:
-            if not dpad_leds[i] == 0:
+            if not dpad_leds[i] == 0 and Neopixel:
                 pixelfading(dpad_leds[i]-1)
     if dpad_mode == "hat":
         gp.hat_pos(hatposition[hatstring])
     else:
         gp.move_joysticks(x, y)
+    if Neopixel:
+        pixels.show()
     #time.sleep(0.01)
 
