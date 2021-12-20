@@ -7,12 +7,15 @@
 ====================================================
 
 * Author(s): Dan Halbert
+* modified by Losernator
 """
 
 import struct
 import time
 
 from adafruit_hid import find_device
+
+
 
 class Gamepad:
     """Emulate a generic gamepad controller with 16 buttons,
@@ -31,6 +34,7 @@ class Gamepad:
         itself. A device is any object that implements ``send_report()``, ``usage_page`` and
         ``usage``.
         """
+        
         self._gamepad_device = find_device(devices, usage_page=0x1, usage=0x05)
 
         # Reuse this bytearray to send mouse reports.
@@ -57,12 +61,14 @@ class Gamepad:
         self._hat = 0
 
         # Send an initial report to test if HID device is ready.
-        # If not, wait a bit and try once more.
-        try:
-            self.reset_all()
-        except OSError:
-            time.sleep(1)
-            self.reset_all()
+        # If not, wait a bit and try again FOREVER EVER
+        while True:
+            try:
+                self.reset_all()
+            except OSError:
+                time.sleep(1)
+                continue
+            break
 
     def press_buttons(self, *buttons):
         """Press and hold the given buttons."""
@@ -114,7 +120,7 @@ class Gamepad:
         if r_z is not None:
             self._joy_r_z = self._validate_joystick_value(r_z)
         self._send()
-    # add hat support
+        # hat support
     def hat_pos(self, position):
         self._hat = position
         self._send()

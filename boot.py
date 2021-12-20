@@ -43,7 +43,7 @@ gamepad = usb_hid.Device(
     usage_page=0x01,           # Generic Desktop Control
     usage=0x05,                # Gamepad
     report_ids=(4,),           # Descriptor uses report ID 4.
-    in_report_lengths=(7,),    # This gamepad sends 6 bytes in its report.
+    in_report_lengths=(7,),    # This gamepad sends 7 bytes in its report.
     out_report_lengths=(0,),   # It does not receive any reports.
 )
 
@@ -53,7 +53,7 @@ usb_midi.disable()
 button = digitalio.DigitalInOut(board.GP2)
 button.switch_to_input(pull=digitalio.Pull.UP)
 
-if not button.value:
+if button.value:
     storage.disable_usb_drive()    # Hide drive
     usb_cdc.disable()              # REPL off
 '''
