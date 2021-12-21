@@ -5,7 +5,6 @@ import time
 import board
 import digitalio
 import usb_hid
-#import adafruit_fancyled.adafruit_fancyled as fancy
 import neopixel
 from hid_gamepad import Gamepad
 from adafruit_pypixelbuf import colorwheel
@@ -31,7 +30,7 @@ else :
 # Buttons
 button_pins = []
 gamepad_buttons = []
-# 1:X, 2:A, 3:B, 4:Y, 5:LB, 6:RB, 7:LT, 8:RT, 9:SELECT, 10:START
+# 1:X, 2:A, 3:B, 4:Y, 5:LB, 6:RB, 7:LT, 8:RT, 9:SELECT, 10:START, 11:L3, 12:R3, 13:HOME, 14:TOUCH, 15:L4, 16:R4
 button_keys = ['X', 'A', 'B', 'Y', 'LB', 'RB', 'LT', 'RT', 'SELECT', 'START', 'L3', 'R3', 'HOME', 'TOUCH', 'L4', 'R4']
 for i, button in enumerate(button_keys):
     if config.get(button):
