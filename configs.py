@@ -36,9 +36,9 @@ config = {
    "X_led": 6,
    "Y":board.GP9,
    "Y_led": 5,
-   "LB":board.GP14,
+   #"LB":board.GP14,
    #"LB_led": 0,
-   "RB":board.GP15,
+   #"RB":board.GP15,
    #"LB_led": 0,
    "LT":board.GP10,
    "LT_led": 4,
@@ -52,6 +52,8 @@ config = {
    #"TOUCH":board.GP19,
    #"L4":board.GP20,
    #"R4":board.GP21,
+   "MODE":board.GP14,
+   "TURBO":board.GP15,
 
    # NeoPixel - WS2812
    # 네오픽셀 ws2812b 핀 설정
@@ -71,5 +73,6 @@ config = {
    # joystick mode - 'axis' or 'hat'
    # 조이스틱 모드 설정 'axis' 또는 'hat'
    "dpad_mode": "axis",
+   "turbo_speed": 0.05,
 
 }

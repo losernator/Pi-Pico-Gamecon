@@ -28,8 +28,6 @@ else :
     Neopixel = False
 
 # Buttons
-turbo_speed = config.get('turbo_speed')
-turbo_status = []
 button_pins = []
 gamepad_buttons = []
 # 1:X, 2:A, 3:B, 4:Y, 5:LB, 6:RB, 7:LT, 8:RT, 9:SELECT, 10:START, 11:L3, 12:R3, 13:HOME, 14:TOUCH, 15:L4, 16:R4
@@ -38,24 +36,10 @@ for i, button in enumerate(button_keys):
     if config.get(button):
         button_pins.append(config.get(button))
         gamepad_buttons.append(i+1)
-        turbo_status.append(0)
         if config.get(button+'_led'):
             button_leds.append(config.get(button+'_led'))
         else:
             button_leds.append(0)
-isMode = False
-isTurbo = False
-if config.get('MODE'):
-    mode = digitalio.DigitalInOut(config.get('MODE'))
-    mode.direction = digitalio.Direction.INPUT
-    mode.pull = digitalio.Pull.UP
-    isMode = True
-
-if config.get('TURBO'):
-    turbo = digitalio.DigitalInOut(config.get('TURBO'))
-    turbo.direction = digitalio.Direction.INPUT
-    turbo.pull = digitalio.Pull.UP
-    isTurbo = True
 
 buttons = [digitalio.DigitalInOut(pin) for pin in button_pins]
 for button in buttons:
@@ -142,48 +126,18 @@ def pixelfading(index):
 
 
 current_time = time.monotonic()
-lastshot_time = time.monotonic()
-button_toggle = True
-last_turbo = None
-last_mode = None
 while True:
     if Neopixel:
         if time.monotonic() - current_time > activetime:
             rainbow(0.003)
-    #mode setting
-    if isMode and mode.value != last_mode:
-        last_mode = mode.value
-        if not last_mode:
-            dpad_mode = "hat" if dpad_mode == "axis" else "axis"
-
     # Button pressed value = False
     for i, button in enumerate(buttons):
         button_num = gamepad_buttons[i]
         if not button.value:
-            #check turbo status
-            if isTurbo and turbo_status[i] == 1:
-                if current_time - lastshot_time > turbo_speed:
-                    button_toggle = True if button_toggle == False else False
-                    lastshot_time = time.monotonic()
-                    print (lastshot_time)
-                if button_toggle:
-                    gp.release_buttons(button_num)
-                    if not button_leds[i] == 0 and Neopixel:
-                        pixels[button_leds[i]-1] = (0,0,0)
-                else:
-                    gp.press_buttons(button_num)
-                    if not button_leds[i] == 0 and Neopixel:
-                        pixels[button_leds[i]-1] = led_color[button_leds[i]-1]
-            else:
-                gp.press_buttons(button_num)
-                if not button_leds[i] == 0 and Neopixel:
-                    pixels[button_leds[i]-1] = led_color[button_leds[i]-1]
             current_time = time.monotonic()
-            #turbo setting
-            if isTurbo and turbo.value != last_turbo:
-                last_turbo = turbo.value
-                if not last_turbo:
-                    turbo_status[i] = 1 if turbo_status[i] == 0 else 0
+            gp.press_buttons(button_num)
+            if not button_leds[i] == 0 and Neopixel:
+                pixels[button_leds[i]-1] = led_color[button_leds[i]-1]
         else:
             gp.release_buttons(button_num)
             if not button_leds[i] == 0 and Neopixel:
