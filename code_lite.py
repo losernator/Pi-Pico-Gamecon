@@ -14,7 +14,6 @@ gp = Gamepad(usb_hid.devices)
 
 #NeoPixel
 button_leds = []
-dpad_leds = [0, 0, 0, 0]
 if config.get('neopixel_pin'):
     dpad_leds = config.get('dpad_leds')
     led_color = config.get('led_color')
@@ -36,10 +35,7 @@ for i, button in enumerate(button_keys):
     if config.get(button):
         button_pins.append(config.get(button))
         gamepad_buttons.append(i+1)
-        if config.get(button+'_led'):
-            button_leds.append(config.get(button+'_led'))
-        else:
-            button_leds.append(0)
+        button_leds.append(config.get(button+'_led', -1))
 
 buttons = [digitalio.DigitalInOut(pin) for pin in button_pins]
 for button in buttons:
@@ -48,27 +44,34 @@ for button in buttons:
 
 # Joystick lever
 dpad_mode = config.get('dpad_mode')
-dpad_pins = config.get('dpad_pins')
-dpad_hats = ['up', 'down', 'left', 'right']
 dpad_axis = [ -127, 127, -127, 127 ]
 hatposition = {
     "":0,
-    "up":1,
-    "down":5,
-    "left":7,
-    "right":3,
-    "upleft":8,
-    "upright":2,
-    "downleft":6,
-    "downright":4,
-    "updown":0,
-    "updownleft":7,
-    "updownright":3,
-    "updownleftright":3,
-    "leftright":0,
-    "downleftright":5,
-    "upleftright":1,
+    "UP":1,
+    "DOWN":5,
+    "LEFT":7,
+    "RIGHT":3,
+    "UPLEFT":8,
+    "UPRIGHT":2,
+    "DOWNLEFT":6,
+    "DOWNRIGHT":4,
+    "UPDOWN":0,
+    "UPDOWNLEFT":7,
+    "UPDOWNRIGHT":3,
+    "UPDOWNLEFTRIGHT":3,
+    "LEFTRIGHT":0,
+    "DOWNLEFTRIGHT":5,
+    "UPLEFTRIGHT":1,
 }
+dpad_pins = []
+dpad_leds = []
+dpad_all = []
+dpad_keys = ['UP', 'DOWN', 'LEFT', 'RIGHT']
+for i, dpad in enumerate(dpad_keys):
+    if config.get(dpad):
+        dpad_pins.append(config.get(dpad))
+        dpad_all.append(dpad)
+        dpad_leds.append(config.get(dpad+'_led', -1))
 dpads = [digitalio.DigitalInOut(pin) for pin in dpad_pins]
 for dpad in dpads:
     dpad.direction = digitalio.Direction.INPUT
@@ -96,12 +99,6 @@ def rainbow(speed):
         if (ebreak):
             break
 
-def singlerainbow(speed,pixel_index):
-    for j in range(255):
-        pixels[pixel_index]=colorwheel(256+j&255)
-        pixels.show()
-        time.sleep(speed)
-
 def colorchase(color, speed):
     ebreak = False
     for i in range(num_pixels):
@@ -124,7 +121,6 @@ def pixelfading(index):
     if pixels[index][0]+pixels[index][1]+pixels[index][2] > 0:
         pixels[index]=(max([pixels[index][0] - pixels[index][0]/255 * fadingstep,0]), max([pixels[index][1] - pixels[index][1]/255 * fadingstep,0]), max([pixels[index][2] - pixels[index][2]/255 * fadingstep,0]))
 
-
 current_time = time.monotonic()
 while True:
     if Neopixel:
@@ -136,34 +132,34 @@ while True:
         if not button.value:
             current_time = time.monotonic()
             gp.press_buttons(button_num)
-            if not button_leds[i] == 0 and Neopixel:
-                pixels[button_leds[i]-1] = led_color[button_leds[i]-1]
+            if not button_leds[i] == -1 and Neopixel:
+                pixels[button_leds[i]] = led_color[button_leds[i]]
         else:
             gp.release_buttons(button_num)
-            if not button_leds[i] == 0 and Neopixel:
-                pixelfading(button_leds[i]-1)
+            if not button_leds[i] == -1 and Neopixel:
+                pixelfading(button_leds[i])
     # Joystick
     x = y = 0
     hatstring = ''
     for i, dpad in enumerate(dpads):
         if not dpad.value:
             current_time = time.monotonic()
-            if dpad_mode == "hat":
-                hatstring += dpad_hats[i]
-            else:
-                if i < 2 :
+            if dpad_mode == "axis":
+                if dpad_all[i] == "UP" or dpad_all[i] == "DOWN":
                     y =  dpad_axis[i]
                 else:
                     x =  dpad_axis[i]
-            if not dpad_leds[i] == 0 and Neopixel:
-                pixels[dpad_leds[i]-1] = led_color[dpad_leds[i]-1]
+            else:
+                hatstring += dpad_all[i]
+            if not dpad_leds[i] == -1 and Neopixel:
+                pixels[dpad_leds[i]] = led_color[dpad_leds[i]]
         else:
-            if not dpad_leds[i] == 0 and Neopixel:
-                pixelfading(dpad_leds[i]-1)
-    if dpad_mode == "hat":
-        gp.hat_pos(hatposition[hatstring])
-    else:
+            if not dpad_leds[i] == -1 and Neopixel:
+                pixelfading(dpad_leds[i])
+    if dpad_mode == "axis":
         gp.move_joysticks(x, y)
+    else:
+        gp.hat_pos(hatposition[hatstring])
     if Neopixel:
         pixels.show()
     #time.sleep(0.01)
