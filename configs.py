@@ -12,7 +12,7 @@ WHITE = (250, 250, 250) # better not to use
 config = {
    # 4way Joystick pins
    # You can set NeoPixel LED index number with "~_led" parameter / comment out anything if you don't need LED
-   # 방향키 핀 및 LED 지정 [위, 아래, 좌, 우]
+   # 방향키 핀 및 LED 지정
    "UP":board.GP2,
    #"UP_led": 0,
    "DOWN":board.GP3,
@@ -22,7 +22,7 @@ config = {
    "RIGHT":board.GP5,
    #"RIGHT_led": 0,
    # Buttons - up to 16
-   # 1:X, 2:A, 3:B, 4:Y, 5:LB, 6:RB, 7:LT, 8:RT, 9:SELECT, 10:START, 11:L3, 12:R3, 13:HOME, 14:TOUCH,
+   # 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:RB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:MODEB, 14:THUMBL, 15:THUMBR, 16:EX
    # You can set NeoPixel LED index number with "~_led" parameter :
    #   5-4-3-
    #   0-1-2-
@@ -46,14 +46,14 @@ config = {
    #"START_led": 7,
    "SELECT":board.GP13,
    #"SELECT_led": 8,
-   #"LT":board.GP16,
-   #"RT":board.GP17,
-   #"L3":board.GP18,
-   #"R3":board.GP19,
-   #"HOME":board.GP20,
-   #"TOUCH":board.GP21,
-   #"L4":board.GP20,
-   #"R4":board.GP21,
+   "LT":board.GP16,
+   "RT":board.GP17,
+   #"L2":board.GP18,
+   #"R2":board.GP19,
+   #"MODEB":board.GP18,
+   #"EX":board.GP19,
+   #"THUMBL":board.GP20,
+   #"THUMBR":board.GP21,
    "MODE":board.GP20,
    "TURBO":board.GP21,
 
