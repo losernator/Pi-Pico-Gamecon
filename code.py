@@ -31,7 +31,9 @@ turbo_status = []
 button_pins = []
 gamepad_buttons = []
 # 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:LB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:MODEB, 14:THUMBL, 15:THUMBR, 16:EX
-button_keys = ['A', 'B', 'RB', 'X', 'Y', 'LB', 'LT', 'RT', 'L2', 'R2', 'SELECT', 'START', 'MODEB', 'THUMBL', 'THUMBR', 'EX']
+# alternative config for tekknen
+#button_keys = ['X', 'A', 'B', 'Y', 'LB', 'RB', 'LT', 'RT', 'SELECT', 'START', 'L2', 'R2', 'MODEB', 'LS', 'RS', 'EX']
+button_keys = ['A', 'B', 'RB', 'X', 'Y', 'LB', 'LT', 'RT', 'L2', 'R2', 'SELECT', 'START', 'MODEB', 'LS', 'RS', 'EX']
 for i, button in enumerate(button_keys):
     if config.get(button):
         button_pins.append(config.get(button))
@@ -160,7 +162,6 @@ while True:
                 if current_time - lastshot_time > turbo_speed:
                     button_toggle = True if button_toggle == False else False
                     lastshot_time = time.monotonic()
-                    print (lastshot_time)
                 if button_toggle:
                     gp.release_buttons(button_num)
                     if not button_leds[i] == -1 and Neopixel:
@@ -171,9 +172,9 @@ while True:
                         pixels[button_leds[i]] = led_color[button_leds[i]]
             else:
                 gp.press_buttons(button_num)
-                print ("pressed:",button_num)
+                # print ("pressed:",button_num)
                 if not button_leds[i] == -1 and Neopixel:
-                    print ("LED",button_leds[i])
+                    # print ("LED",button_leds[i])
                     pixels[button_leds[i]] = led_color[button_leds[i]]
             current_time = time.monotonic()
             #turbo setting

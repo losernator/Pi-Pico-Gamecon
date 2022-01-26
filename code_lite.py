@@ -15,7 +15,6 @@ gp = Gamepad(usb_hid.devices)
 #NeoPixel
 button_leds = []
 if config.get('neopixel_pin'):
-    dpad_leds = config.get('dpad_leds')
     led_color = config.get('led_color')
     num_pixels = len(led_color)
     pixels = neopixel.NeoPixel(config.get('neopixel_pin'), num_pixels, auto_write=False)
@@ -29,8 +28,11 @@ else :
 # Buttons
 button_pins = []
 gamepad_buttons = []
-# 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:LB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:MODEB, 14:THUMBL, 15:THUMBR, 16:EX
-button_keys = ['A', 'B', 'RB', 'X', 'Y', 'LB', 'LT', 'RT', 'L2', 'R2', 'SELECT', 'START', 'MODEB', 'THUMBL', 'THUMBR', 'EX']
+# 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:LB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:MODEB, 14:LS, 15:RS, 16:EX
+# alternative config for tekknen
+#button_keys = ['X', 'A', 'B', 'Y', 'LB', 'RB', 'LT', 'RT', 'SELECT', 'START', 'L2', 'R2', 'MODEB', 'LS', 'RS', 'EX']
+button_keys = ['A', 'B', 'RB', 'X', 'Y', 'LB', 'LT', 'RT', 'L2', 'R2', 'SELECT', 'START', 'MODEB', 'LS', 'RS', 'EX']
+for i, button in enumerate(button_keys):
 for i, button in enumerate(button_keys):
     if config.get(button):
         button_pins.append(config.get(button))

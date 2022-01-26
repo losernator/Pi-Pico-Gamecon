@@ -22,7 +22,7 @@ config = {
    "RIGHT":board.GP5,
    #"RIGHT_led": 0,
    # Buttons - up to 16
-   # 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:RB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:MODEB, 14:THUMBL, 15:THUMBR, 16:EX
+   # 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:RB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:MODEB, 14:LS, 15:RS, 16:EX
    # You can set NeoPixel LED index number with "~_led" parameter :
    #   5-4-3-
    #   0-1-2-
@@ -52,11 +52,11 @@ config = {
    #"R2":board.GP19,
    #"MODEB":board.GP18,
    #"EX":board.GP19,
-   #"THUMBL":board.GP20,
-   #"THUMBR":board.GP21,
-   "MODE":board.GP20,
-   "TURBO":board.GP21,
-
+   #"LS":board.GP20,
+   #"RS":board.GP21,
+   "TURBO":board.GP20,
+   "MODE":board.GP21,
+   
    # NeoPixel - WS2812
    # 네오픽셀 ws2812b 핀 설정
    # LED가 없을 경우 주석처리
@@ -64,7 +64,6 @@ config = {
    # RED, YELLOW, GREEN, CYAN, BLUE, PURPLE, GREY, WHITE
    # RGB LED Color, must set as many as LED lights you have
    # 버튼 별 기본 색상 설정 *LED 개수 만큼 지정할 것
-   "dpad_led_color": [GREEN, CYAN, YELLOW, BLUE ],
    "led_color": [GREEN, RED, CYAN, CYAN, YELLOW, BLUE ],
    # LED 밝기 1이 최대
    "led_brightness": 1, # 1 is maximum value
@@ -76,6 +75,6 @@ config = {
    # joystick mode - 'axis' or 'hat'
    # 조이스틱 모드 설정 'axis' 또는 'hat'
    "dpad_mode": "axis",
-   "turbo_speed": 0.03,
+   "turbo_speed": 0.04,
 
 }
