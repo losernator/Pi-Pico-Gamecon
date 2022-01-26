@@ -16,14 +16,17 @@ Supports 16 buttons, 4-way Joystick and NeoPixel WS2812B strip
 - v 1.0
 
 ## How to use
-WIP
+### PINOUT
+![Pico Gamecon pinout](picocon_pinout.png)
 
-### Options:
-- WIP
+### Options (configs.py):
+- Pin number
+- Buttons to use
+- Turbo speed
+- Neopixel Color, index num., fading speed
 
 ### Compatibility
-
-**WIP**
+PC, Android, SBC like Rasberry Pi
 
 ## License
 MIT
