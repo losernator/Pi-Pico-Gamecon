@@ -34,17 +34,18 @@ class Gamepad:
         itself. A device is any object that implements ``send_report()``, ``usage_page`` and
         ``usage``.
         """
-        
+
         self._gamepad_device = find_device(devices, usage_page=0x1, usage=0x05)
 
         # Reuse this bytearray to send mouse reports.
         # Typically controllers start numbering buttons at 1 rather than 0.
         # report[0] buttons 1-8 (LSB is button 1)
         # report[1] buttons 9-16
-        # report[2] joystick 0 x: -127 to 127
-        # report[3] joystick 0 y: -127 to 127
-        # report[4] joystick 1 x: -127 to 127
-        # report[5] joystick 1 y: -127 to 127
+        # report[2] joystick 0 x: 0 to 254
+        # report[3] joystick 0 y: 0 to 254
+        # report[4] joystick 1 x: 0 to 254
+        # report[5] joystick 1 y: 0 to 254
+        # report[6] HAT: 0 to 7
         self._report = bytearray(7)
 
         # Remember the last report as well, so we can avoid sending
@@ -128,11 +129,11 @@ class Gamepad:
     def reset_all(self):
         """Release all buttons and set joysticks to zero."""
         self._buttons_state = 0
-        self._joy_x = 0
-        self._joy_y = 0
-        self._joy_z = 0
-        self._joy_r_z = 0
-        self._hat = 0
+        self._joy_x = 128
+        self._joy_y = 128
+        self._joy_z = 128
+        self._joy_r_z = 128
+        self._hat = -1
         self._send(always=True)
 
     def _send(self, always=False):
@@ -140,7 +141,7 @@ class Gamepad:
         If ``always`` is ``False`` (the default), send only if there have been changes.
         """
         struct.pack_into(
-            "<HbbbbB",
+            "<HBBBBb",
             self._report,
             0,
             self._buttons_state,
@@ -164,6 +165,6 @@ class Gamepad:
 
     @staticmethod
     def _validate_joystick_value(value):
-        if not -127 <= value <= 127:
+        if not 0 <= value <= 255:
             raise ValueError("Joystick value must be in range -127 to 127")
         return value

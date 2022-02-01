@@ -56,7 +56,7 @@ config = {
    #"RS":board.GP21,
    "TURBO":board.GP20,
    "MODE":board.GP21,
-   
+
    # NeoPixel - WS2812
    # 네오픽셀 ws2812b 핀 설정
    # LED가 없을 경우 주석처리
@@ -74,7 +74,7 @@ config = {
 
    # joystick mode - 'axis' or 'hat'
    # 조이스틱 모드 설정 'axis' 또는 'hat'
-   "dpad_mode": "axis",
+   "dpad_mode": "hat",
    "turbo_speed": 0.04,
 
 }

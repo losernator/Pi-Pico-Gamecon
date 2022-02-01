@@ -1,6 +1,6 @@
 # raspigamer
 # License-Identifier: MIT
-# 2022/01/19
+# 2022/02/01
 import time
 import board
 import digitalio
@@ -61,24 +61,24 @@ for button in buttons:
 
 # Joystick lever
 dpad_mode = config.get('dpad_mode')
-dpad_axis = [ -127, 127, -127, 127 ]
+dpad_axis = [ 0, 254, 0, 254 ]
 hatposition = {
-    "":0,
-    "UP":1,
-    "DOWN":5,
-    "LEFT":7,
-    "RIGHT":3,
-    "UPLEFT":8,
-    "UPRIGHT":2,
-    "DOWNLEFT":6,
-    "DOWNRIGHT":4,
-    "UPDOWN":0,
-    "UPDOWNLEFT":7,
-    "UPDOWNRIGHT":3,
-    "UPDOWNLEFTRIGHT":3,
-    "LEFTRIGHT":0,
-    "DOWNLEFTRIGHT":5,
-    "UPLEFTRIGHT":1,
+    "":-1,
+    "UP":0,
+    "DOWN":4,
+    "LEFT":6,
+    "RIGHT":2,
+    "UPLEFT":7,
+    "UPRIGHT":1,
+    "DOWNLEFT":5,
+    "DOWNRIGHT":3,
+    "UPDOWN":-1,
+    "UPDOWNLEFT":6,
+    "UPDOWNRIGHT":2,
+    "UPDOWNLEFTRIGHT":2,
+    "LEFTRIGHT":-1,
+    "DOWNLEFTRIGHT":4,
+    "UPLEFTRIGHT":0,
 }
 dpad_pins = []
 dpad_leds = []
@@ -187,7 +187,7 @@ while True:
             if not button_leds[i] == -1 and Neopixel:
                 pixelfading(button_leds[i])
     # Joystick
-    x = y = 0
+    x = y = 128
     hatstring = ''
     for i, dpad in enumerate(dpads):
         if not dpad.value:
@@ -204,10 +204,10 @@ while True:
         else:
             if not dpad_leds[i] == -1 and Neopixel:
                 pixelfading(dpad_leds[i])
-    if dpad_mode == "axis":
-        gp.move_joysticks(x, y)
-    else:
-        gp.hat_pos(hatposition[hatstring])
+
+    gp.move_joysticks(x, y)
+    gp.hat_pos(hatposition[hatstring])
+
     if Neopixel:
         pixels.show()
     #time.sleep(0.01)
