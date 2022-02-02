@@ -43,11 +43,13 @@ config = {
    "RB":board.GP11,
    "RB_led": 2,
    "START":board.GP12,
-   #"START_led": 7,
+   #"START_led": 6,
    "SELECT":board.GP13,
-   #"SELECT_led": 8,
+   #"SELECT_led": 7,
    "LT":board.GP16,
+   #"LT_led": 8,
    "RT":board.GP17,
+   #"RT_led": 9,
    #"L2":board.GP18,
    #"R2":board.GP19,
    #"MODEB":board.GP18,
@@ -65,6 +67,8 @@ config = {
    # RGB LED Color, must set as many as LED lights you have
    # 버튼 별 기본 색상 설정 *LED 개수 만큼 지정할 것
    "led_color": [GREEN, RED, CYAN, CYAN, YELLOW, BLUE ],
+   # Default color for buttons with no assigned color
+   "default_color":GREY,
    # LED 밝기 1이 최대
    "led_brightness": 1, # 1 is maximum value
    # 버튼 디밍 단계 (0~255), 높을수록 빨리 꺼짐
@@ -75,6 +79,7 @@ config = {
    # joystick mode - 'axis' or 'hat'
    # 조이스틱 모드 설정 'axis' 또는 'hat'
    "dpad_mode": "hat",
+   # Turbo button speed (sec)
    "turbo_speed": 0.04,
 
 }

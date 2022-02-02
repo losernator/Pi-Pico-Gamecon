@@ -12,24 +12,12 @@ from configs import config
 
 gp = Gamepad(usb_hid.devices)
 
-#NeoPixel
-button_leds = []
-if config.get('neopixel_pin'):
-    led_color = config.get('led_color')
-    num_pixels = len(led_color)
-    pixels = neopixel.NeoPixel(config.get('neopixel_pin'), num_pixels, auto_write=False)
-    pixels.brightness = config.get('led_brightness')
-    fadingstep = config.get('fadingstep')
-    activetime = config.get('activetime')
-    Neopixel = True
-else :
-    Neopixel = False
-
 # Buttons
 turbo_speed = config.get('turbo_speed')
 turbo_status = []
 button_pins = []
 gamepad_buttons = []
+button_leds = []
 # 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:LB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:MODEB, 14:THUMBL, 15:THUMBR, 16:EX
 # alternative config for tekknen
 #button_keys = ['X', 'A', 'B', 'Y', 'LB', 'RB', 'LT', 'RT', 'SELECT', 'START', 'L2', 'R2', 'MODEB', 'LS', 'RS', 'EX']
@@ -40,6 +28,7 @@ for i, button in enumerate(button_keys):
         gamepad_buttons.append(i+1)
         turbo_status.append(0)
         button_leds.append(config.get(button+'_led', -1))
+
 isMode = False
 isTurbo = False
 if config.get('MODE'):
@@ -93,6 +82,22 @@ dpads = [digitalio.DigitalInOut(pin) for pin in dpad_pins]
 for dpad in dpads:
     dpad.direction = digitalio.Direction.INPUT
     dpad.pull = digitalio.Pull.UP
+
+#NeoPixel
+if config.get('neopixel_pin'):
+    default_color = config.get('default_color')
+    led_color = config.get('led_color')
+    num_pixels = max([max(button_leds),max(dpad_leds)])+1
+    if len(led_color) < num_pixels:
+        for i in range (num_pixels - len(led_color)):
+            led_color.append(default_color)
+    pixels = neopixel.NeoPixel(config.get('neopixel_pin'), num_pixels, auto_write=False)
+    pixels.brightness = config.get('led_brightness')
+    fadingstep = config.get('fadingstep')
+    activetime = config.get('activetime')
+    Neopixel = True
+else :
+    Neopixel = False
 
 def rainbow(speed):
     ebreak = False
