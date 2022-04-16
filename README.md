@@ -1,13 +1,16 @@
-# Pico Gamecon
+# Pico Gamecon 
 Pico Gamecon\
-Raspberry Pi Pico Game Controller using CircuitPython 7.0
+Raspberry Pi Pico Gamepad using CircuitPython 7.x
 
 Supports 16 buttons, 4-way Joystick and NeoPixel WS2812B strip
  
 ## Changelog
+- v 1.5
+  * Add analog input
+
 - v 1.4
   * Add Mode change button (axis - hat)
-  * Add Turbo function (useage: press button to use and press TURBO button simultaneously - button first, not turbo )
+  * Add Turbo function (useage: hold button to use and press TURBO button simultaneously )
 
 - v 1.3
   * Improved Neopixel dimming method
@@ -16,6 +19,9 @@ Supports 16 buttons, 4-way Joystick and NeoPixel WS2812B strip
 - v 1.0
 
 ## How to use
+### install circuitpython on your Pico
+https://circuitpython.org/board/raspberry_pi_pico/
+
 ### PINOUT
 ![Pico Gamecon pinout](picocon_pinout.png)
 
@@ -25,12 +31,11 @@ Supports 16 buttons, 4-way Joystick and NeoPixel WS2812B strip
 - Turbo speed
 - Neopixel Color, index num., fading speed
 
-### Compatibility
+## Compatibility
 PC, Android, SBC like Rasberry Pi
 
 ## License
 MIT
-
 
 ## Screenshots
 

@@ -62,7 +62,7 @@ usb_midi.disable()
 button = digitalio.DigitalInOut(board.GP2)
 button.switch_to_input(pull=digitalio.Pull.UP)
 
-if not button.value:
+if button.value:
     storage.disable_usb_drive()    # Hide drive
     usb_cdc.disable()              # REPL off
 '''
