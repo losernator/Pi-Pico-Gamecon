@@ -4,10 +4,11 @@
 import time
 import board
 import digitalio
+import analogio
 import usb_hid
 import neopixel
 from hid_gamepad import Gamepad
-from adafruit_pypixelbuf import colorwheel
+from rainbowio import colorwheel
 from configs import config
 
 gp = Gamepad(usb_hid.devices)
@@ -18,10 +19,10 @@ turbo_status = []
 button_pins = []
 gamepad_buttons = []
 button_leds = []
-# 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:LB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:MODEB, 14:THUMBL, 15:THUMBR, 16:EX
+# 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:LB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:EX1, 14:THUMBL, 15:THUMBR, 16:EX2
 # alternative config for tekknen
-#button_keys = ['X', 'A', 'B', 'Y', 'LB', 'RB', 'LT', 'RT', 'SELECT', 'START', 'L2', 'R2', 'MODEB', 'LS', 'RS', 'EX']
-button_keys = ['A', 'B', 'RB', 'X', 'Y', 'LB', 'LT', 'RT', 'L2', 'R2', 'SELECT', 'START', 'MODEB', 'LS', 'RS', 'EX']
+#button_keys = ['X', 'A', 'B', 'Y', 'LB', 'RB', 'LT', 'RT', 'SELECT', 'START', 'L2', 'R2', 'EX1', 'LS', 'RS', 'EX2']
+button_keys = ['A', 'B', 'RB', 'X', 'Y', 'LB', 'LT', 'RT', 'L2', 'R2', 'SELECT', 'START', 'EX1', 'LS', 'RS', 'EX2']
 for i, button in enumerate(button_keys):
     if config.get(button):
         button_pins.append(config.get(button))
@@ -36,7 +37,6 @@ if config.get('MODE'):
     mode.direction = digitalio.Direction.INPUT
     mode.pull = digitalio.Pull.UP
     isMode = True
-
 if config.get('TURBO'):
     turbo = digitalio.DigitalInOut(config.get('TURBO'))
     turbo.direction = digitalio.Direction.INPUT
@@ -53,21 +53,21 @@ dpad_mode = config.get('dpad_mode')
 dpad_axis = [ 0, 254, 0, 254 ]
 hatposition = {
     "":-1,
-    "UP":0,
-    "DOWN":4,
-    "LEFT":6,
-    "RIGHT":2,
-    "UPLEFT":7,
-    "UPRIGHT":1,
-    "DOWNLEFT":5,
-    "DOWNRIGHT":3,
+    "UP":1,
+    "DOWN":5,
+    "LEFT":7,
+    "RIGHT":3,
+    "UPLEFT":8,
+    "UPRIGHT":2,
+    "DOWNLEFT":6,
+    "DOWNRIGHT":4,
     "UPDOWN":-1,
-    "UPDOWNLEFT":6,
-    "UPDOWNRIGHT":2,
-    "UPDOWNLEFTRIGHT":2,
+    "UPDOWNLEFT":7,
+    "UPDOWNRIGHT":3,
+    "UPDOWNLEFTRIGHT":3,
     "LEFTRIGHT":-1,
-    "DOWNLEFTRIGHT":4,
-    "UPLEFTRIGHT":0,
+    "DOWNLEFTRIGHT":5,
+    "UPLEFTRIGHT":1,
 }
 dpad_pins = []
 dpad_leds = []
@@ -82,6 +82,13 @@ dpads = [digitalio.DigitalInOut(pin) for pin in dpad_pins]
 for dpad in dpads:
     dpad.direction = digitalio.Direction.INPUT
     dpad.pull = digitalio.Pull.UP
+#Analog axis
+if config.get('AnalogX'):
+    ax = analogio.AnalogIn(config.get('AnalogX'))
+    ay = analogio.AnalogIn(config.get('AnalogY'))
+    isAnalog = True
+else:
+    isAnalog = False
 
 #NeoPixel
 if config.get('neopixel_pin'):
@@ -114,6 +121,10 @@ def rainbow(speed):
                 if not hat.value:
                     ebreak = True
                     break
+            if isAnalog:
+                if not analog_check(ax.value) == 127 or not analog_check(ay.value) == 127 :
+                    ebreak = True
+                    break
             if (ebreak):
                 break
             pixels.show()
@@ -143,6 +154,29 @@ def pixelfading(index):
     if pixels[index][0]+pixels[index][1]+pixels[index][2] > 0:
         pixels[index]=(max([pixels[index][0] - pixels[index][0]/255 * fadingstep,0]), max([pixels[index][1] - pixels[index][1]/255 * fadingstep,0]), max([pixels[index][2] - pixels[index][2]/255 * fadingstep,0]))
 
+def range_map(x, in_min, in_max, out_min, out_max):
+    return (x - in_min) * (out_max - out_min) // (in_max - in_min) + out_min
+def analog_dz(x, dz):
+    if abs(x-127) < dz:
+        x = 127
+    return x
+def analog_check(x):
+    x = analog_dz(range_map(x, 0, 65535, 0, 254),10)
+    return x
+def analog_hat(x,y):
+    x = analog_dz(range_map(x, 0, 65535, 0, 254),10)
+    y = analog_dz(range_map(y, 0, 65535, 0, 254),10)
+    hatx = ""
+    haty = ""
+    if x < 127:
+        hatx = "LEFT"
+    elif x > 127:
+        hatx = "RIGHT"
+    if y < 127:
+        haty = "UP"
+    elif y > 127:
+        haty = "DOWN"
+    return haty+hatx
 current_time = time.monotonic()
 lastshot_time = time.monotonic()
 button_toggle = True
@@ -192,11 +226,10 @@ while True:
             if not button_leds[i] == -1 and Neopixel:
                 pixelfading(button_leds[i])
     # Joystick
-    x = y = 128
+    x = y = 127
     hatstring = ''
     for i, dpad in enumerate(dpads):
         if not dpad.value:
-            current_time = time.monotonic()
             if dpad_mode == "axis":
                 if dpad_all[i] == "UP" or dpad_all[i] == "DOWN":
                     y =  dpad_axis[i]
@@ -209,10 +242,18 @@ while True:
         else:
             if not dpad_leds[i] == -1 and Neopixel:
                 pixelfading(dpad_leds[i])
+    if isAnalog :
+        if dpad_mode == "axis":
+            hatstring = analog_hat(ax.value, ay.value)
+            print (hatstring)
+        else:
+            x = analog_check(ax.value)
+            y = analog_check(ay.value)
+    if not x == 127 or not y == 127 or not hatstring == "":
+        current_time = time.monotonic()
 
     gp.move_joysticks(x, y)
     gp.hat_pos(hatposition[hatstring])
-
     if Neopixel:
         pixels.show()
     #time.sleep(0.01)

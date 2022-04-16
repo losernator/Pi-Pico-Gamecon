@@ -28,15 +28,22 @@ GAMEPAD_REPORT_DESCRIPTOR = bytes((
     0x95, 0x04,  #   Report Count (4)
     0x81, 0x02,  #   Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
     0x09, 0x39,  #   USAGE (Hat switch)
-    0x15, 0x00,  #   LOGICAL_MINIMUM (1)
-    0x25, 0x07,  #   LOGICAL_MAXIMUM (7)
+    0x15, 0x01,  #   LOGICAL_MINIMUM (1)
+    0x25, 0x08,  #   LOGICAL_MAXIMUM (8)
     0x35, 0x00,  #   PHYSICAL_MINIMUM (0)
     0x46, 0x3B, 0x01,  #    PHYSICAL_MAXIMUM(315)
-    0x65, 0x14,  #   UNIT (Eng Rot:Angular Pos)
+    0x66, 0x14, 0x00, #   UNIT (Eng Rot:Angular Pos)
     0x75, 0x04,  #   REPORT_SIZE (4)
     0x95, 0x01,  #   REPORT_COUNT (1)
-    0x81, 0x02,  #   INPUT (Data,Var,Abs)
-    0x81, 0x01,
+    0x81, 0x42,  #   INPUT (Data,Var,Abs)
+    0x75, 0x04,  #   Report Size (4)
+    0x95, 0x01,  #   Report Count (1)
+    0x15, 0x00,  #   Logical Minimum (0)
+    0x25, 0x00,  #   Logical Maximum (0)
+    0x35, 0x00,  #   Physical Minimum (0)
+    0x45, 0x00,  #   Physical Maximum (0)
+    0x65, 0x00,  #   Unit (None)
+    0x81, 0x03,  #   Input (Const,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
     0xC0,        # End Collection
 ))
 
@@ -55,7 +62,7 @@ usb_midi.disable()
 button = digitalio.DigitalInOut(board.GP2)
 button.switch_to_input(pull=digitalio.Pull.UP)
 
-if button.value:
+if not button.value:
     storage.disable_usb_drive()    # Hide drive
     usb_cdc.disable()              # REPL off
 '''

@@ -45,7 +45,7 @@ class Gamepad:
         # report[3] joystick 0 y: 0 to 254
         # report[4] joystick 1 x: 0 to 254
         # report[5] joystick 1 y: 0 to 254
-        # report[6] HAT: 0 to 7
+        # report[6] HAT: 1 to 8
         self._report = bytearray(7)
 
         # Remember the last report as well, so we can avoid sending

@@ -3,11 +3,21 @@ import board
 RED = (255,  0,  0)
 YELLOW = (255, 150, 0)
 GREEN = (0, 255, 0)
+ORANGE = (255, 40, 0)
 CYAN = (0, 250, 250)
 BLUE = (0, 0, 255)
 PURPLE = (180, 0, 255)
 GREY = (30, 30, 30)
 WHITE = (250, 250, 250) # better not to use
+TEAL = (0, 255, 120)
+PURPLE = (180, 0, 255)
+MAGENTA = (255, 0, 20)
+BLACK = (0, 0, 0) # black or off
+GOLD = (255, 222, 30)
+PINK = (242, 90, 255)
+AQUA = (50, 255, 255)
+JADE = (0, 255, 40)
+AMBER = (255, 100, 0)
 
 config = {
    # 4way Joystick pins
@@ -22,7 +32,7 @@ config = {
    "RIGHT":board.GP5,
    #"RIGHT_led": 0,
    # Buttons - up to 16
-   # 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:RB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:MODEB, 14:LS, 15:RS, 16:EX
+   # 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:RB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:EX1, 14:LS, 15:RS, 16:EX2
    # You can set NeoPixel LED index number with "~_led" parameter :
    #   5-4-3-
    #   0-1-2-
@@ -52,12 +62,15 @@ config = {
    #"RT_led": 9,
    #"L2":board.GP18,
    #"R2":board.GP19,
-   #"MODEB":board.GP18,
-   #"EX":board.GP19,
+   #"EX1":board.GP18,
+   #"EX2":board.GP19,
    #"LS":board.GP20,
    #"RS":board.GP21,
    "TURBO":board.GP20,
    "MODE":board.GP21,
+   # Pins for anlog input - should be ADC pin
+   "AnalogX":board.GP27,
+   "AnalogY":board.GP26,
 
    # NeoPixel - WS2812
    # 네오픽셀 ws2812b 핀 설정
@@ -76,7 +89,7 @@ config = {
    # 대기모드 진입 시간 (초)
    "activetime" : 5, # Standby mode entry time(sec)
 
-   # joystick mode - 'axis' or 'hat'
+   # Defult DPAD mode - 'axis' or 'hat'
    # 조이스틱 모드 설정 'axis' 또는 'hat'
    "dpad_mode": "hat",
    # Turbo button speed (sec)
