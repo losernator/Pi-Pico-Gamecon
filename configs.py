@@ -60,17 +60,17 @@ config = {
    #"LT_led": 8,
    "RT":board.GP17,
    #"RT_led": 9,
-   #"L2":board.GP18,
-   #"R2":board.GP19,
-   #"EX1":board.GP18,
-   #"EX2":board.GP19,
-   #"LS":board.GP20,
-   #"RS":board.GP21,
+   #"L3":board.GP18,
+   #"R3":board.GP19,
+   #"PS":board.GP18,
+   #"TP":board.GP19,
+   #"EX1":board.GP20,
+   #"EX2":board.GP21,
    "TURBO":board.GP20,
    "MODE":board.GP21,
    # Pins for anlog input - should be ADC pin
-   "AnalogX":board.GP27,
-   "AnalogY":board.GP26,
+   #"AnalogX":board.GP27,
+   #"AnalogY":board.GP26,
 
    # NeoPixel - WS2812
    # 네오픽셀 ws2812b 핀 설정

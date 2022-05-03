@@ -1,6 +1,6 @@
-# raspigamer
+# losernator
 # License-Identifier: MIT
-# 2022/04/17
+# 2022/05/03
 import time
 import board
 import digitalio
@@ -20,9 +20,9 @@ button_pins = []
 gamepad_buttons = []
 button_leds = []
 # 1:A, 2:B, 3:RB, 4:X, 5:Y, 6:LB, 7:LT, 8:RT, 9:L2, 10:R2, 11:SELECT, 12:START, 13:EX1, 14:THUMBL, 15:THUMBR, 16:EX2
-# alternative config for tekknen
-#button_keys = ['X', 'A', 'B', 'Y', 'LB', 'RB', 'LT', 'RT', 'SELECT', 'START', 'L2', 'R2', 'EX1', 'LS', 'RS', 'EX2']
-button_keys = ['A', 'B', 'RB', 'X', 'Y', 'LB', 'LT', 'RT', 'L2', 'R2', 'SELECT', 'START', 'EX1', 'LS', 'RS', 'EX2']
+# button_keys = ['A', 'B', 'RB', 'X', 'Y', 'LB', 'LT', 'RT', 'L3', 'R3', 'SELECT', 'START', 'PS', 'TP', 'EX1', 'EX2']
+# D-Input layout for tekknen
+button_keys = ['X', 'A', 'B', 'Y', 'LB', 'RB', 'LT', 'RT', 'SELECT', 'START', 'L3', 'R3', 'PS', 'TP', 'EX1', 'EX2']
 for i, button in enumerate(button_keys):
     if config.get(button):
         button_pins.append(config.get(button))
@@ -52,22 +52,22 @@ for button in buttons:
 dpad_mode = config.get('dpad_mode')
 dpad_axis = [ 0, 254, 0, 254 ]
 hatposition = {
-    "":-1,
-    "UP":1,
-    "DOWN":5,
-    "LEFT":7,
-    "RIGHT":3,
-    "UPLEFT":8,
-    "UPRIGHT":2,
-    "DOWNLEFT":6,
-    "DOWNRIGHT":4,
-    "UPDOWN":-1,
-    "UPDOWNLEFT":7,
-    "UPDOWNRIGHT":3,
-    "UPDOWNLEFTRIGHT":3,
-    "LEFTRIGHT":-1,
-    "DOWNLEFTRIGHT":5,
-    "UPLEFTRIGHT":1,
+    "":8,
+    "UP":0,
+    "DOWN":4,
+    "LEFT":6,
+    "RIGHT":2,
+    "UPLEFT":7,
+    "UPRIGHT":1,
+    "DOWNLEFT":5,
+    "DOWNRIGHT":3,
+    "UPDOWN":8,
+    "UPDOWNLEFT":6,
+    "UPDOWNRIGHT":2,
+    "UPDOWNLEFTRIGHT":2,
+    "LEFTRIGHT":8,
+    "DOWNLEFTRIGHT":4,
+    "UPLEFTRIGHT":0,
 }
 dpad_pins = []
 dpad_leds = []
@@ -177,6 +177,7 @@ def analog_hat(x,y):
     elif y > 127:
         haty = "DOWN"
     return haty+hatx
+
 current_time = time.monotonic()
 lastshot_time = time.monotonic()
 button_toggle = True

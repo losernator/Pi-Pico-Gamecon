@@ -35,7 +35,7 @@ class Gamepad:
         ``usage``.
         """
 
-        self._gamepad_device = find_device(devices, usage_page=0x1, usage=0x05)
+        self._gamepad_device = find_device(devices, usage_page=0x01, usage=0x05)
 
         # Reuse this bytearray to send mouse reports.
         # Typically controllers start numbering buttons at 1 rather than 0.
@@ -45,7 +45,7 @@ class Gamepad:
         # report[3] joystick 0 y: 0 to 254
         # report[4] joystick 1 x: 0 to 254
         # report[5] joystick 1 y: 0 to 254
-        # report[6] HAT: 1 to 8
+        # report[6] HAT: 0 to 7
         self._report = bytearray(7)
 
         # Remember the last report as well, so we can avoid sending
@@ -59,7 +59,7 @@ class Gamepad:
         self._joy_y = 0
         self._joy_z = 0
         self._joy_r_z = 0
-        self._hat = 0
+        self._hat = 8
 
         # Send an initial report to test if HID device is ready.
         # If not, wait a bit and try again FOREVER EVER

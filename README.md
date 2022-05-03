@@ -2,11 +2,11 @@
 Pico Gamecon\
 Raspberry Pi Pico Gamepad using CircuitPython 7.x
 
-Supports 16 buttons, 4-way Joystick and NeoPixel WS2812B strip
+Supports 16 buttons, 4-way Joystick, 1 analog stick and NeoPixel WS2812B strip
  
 ## Changelog
 - v 1.5
-  * Add analog input
+  * Add analog input (disabled default, should change config.py)
 
 - v 1.4
   * Add Mode change button (axis - hat)
@@ -32,6 +32,7 @@ https://circuitpython.org/board/raspberry_pi_pico/
 - Neopixel Color, index num., fading speed
 
 ## Compatibility
+D-INPUT
 PC, Android, SBC like Rasberry Pi
 
 ## License
